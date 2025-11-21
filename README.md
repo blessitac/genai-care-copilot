@@ -331,8 +331,8 @@ genai-care-copilot/
     │   ├── api.ts        # API client
     │   ├── types.ts      # TypeScript types
     │   └── components/   # React components
-Placeholder for PR #6
     └── dist/             # Built assets (generated)
 ```
 
 This project is designed to be interview-ready and demonstrates modern full-stack development practices with AI integration.
+Placeholder for PR #6
