@@ -150,3 +150,5 @@ The interface is fully responsive and works on:
 - Desktop computers (optimal experience)
 - Tablets (adapted layout)
 - Mobile phones (stacked layout for smaller screens)
+
+This is a placeholder edit to enable PR5 creation.
