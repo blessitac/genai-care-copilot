@@ -81,4 +81,72 @@ If no OpenAI API key is configured, the system will:
 - Provide patient-friendly explanations using keyword matching and templated responses
 - Ensure all endpoints continue to work with realistic, contextual outputs
 
-This is a placeholder edit to enable PR3 creation.
+## Frontend Setup
+
+The React frontend provides a complete user interface for the GenAI Care Copilot with role-based views for both clinicians and patients.
+
+### Installation and Running
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend will be available at `http://localhost:12000` and will automatically connect to the backend API at `http://localhost:8000`.
+
+### Frontend Features
+
+#### Role Selector
+- Initial landing page allowing users to choose their role
+- Clean, centered interface with two role options:
+  - **Continue as Clinician** - Access to the clinician dashboard
+  - **Continue as Patient** - Access to the patient portal
+
+#### Clinician View
+- **Three-panel layout** for efficient workflow:
+  - **Left Panel**: Patient selector with list of all patients showing name, age, sex, and risk score
+  - **Middle Panel**: Patient snapshot displaying:
+    - Basic demographics and provider information
+    - Current conditions as labeled tags
+    - Recent lab values and vitals
+    - "Generate Visit Summary" button for AI insights
+  - **Right Panel**: AI-generated content including:
+    - Visit summary paragraph
+    - Risk flags (highlighted in red)
+    - Follow-up recommendations (bulleted list)
+
+#### Patient View
+- **Patient summary card** with personalized greeting and overview:
+  - Current conditions displayed as tags
+  - Snippet of most recent clinical note
+  - Medications table showing name, dose, and frequency
+- **Interactive chat interface** for Q&A with the care copilot:
+  - Quick-ask buttons for common questions:
+    - "Explain my medications"
+    - "What should I do this week?"
+    - "Why am I taking Lisinopril?"
+  - Free-form question input with chat history
+  - Chat bubbles styled with user messages on right, AI responses on left
+
+### Technology Stack
+
+- **React 18** with TypeScript for type safety
+- **Vite** for fast development and building
+- **TailwindCSS** for responsive, utility-first styling
+- **Axios** for API communication with the FastAPI backend
+
+### API Integration
+
+The frontend calls the following backend endpoints:
+- `GET /api/patients` - Load patient list for clinician view
+- `GET /api/patients/{id}` - Load detailed patient information
+- `POST /api/generate/clinician-summary` - Generate AI summaries for clinicians
+- `POST /api/generate/patient-answer` - Generate patient-friendly answers to questions
+
+### Responsive Design
+
+The interface is fully responsive and works on:
+- Desktop computers (optimal experience)
+- Tablets (adapted layout)
+- Mobile phones (stacked layout for smaller screens)
