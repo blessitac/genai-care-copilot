@@ -1,0 +1,50 @@
+{
+  "P001": [
+    {
+      "name": "Metformin",
+      "dose": "1000 mg",
+      "frequency": "twice daily",
+      "indication": "Type 2 Diabetes"
+    },
+    {
+      "name": "Lisinopril",
+      "dose": "10 mg",
+      "frequency": "once daily",
+      "indication": "Hypertension and kidney protection"
+    },
+    {
+      "name": "Insulin glargine",
+      "dose": "20 units",
+      "frequency": "at bedtime",
+      "indication": "Basal insulin for diabetes"
+    }
+  ],
+  "P002": [
+    {
+      "name": "Furosemide",
+      "dose": "40 mg",
+      "frequency": "twice daily",
+      "indivation": "Fluid management in heart failure"
+    },
+    {
+      "name": "Carvedilol",
+      "dose": "12.5 mg",
+      "frequency": "twice daily",
+      "indication": "Heart failure and blood pressure control"
+    }
+  ],
+  "P003": [
+    {
+      "name": "Albuterol Inhaler",
+      "dose": "2 puffs",
+      "frequency": "as needed",
+      "indication": "COPD symptom relief"
+    },
+    {
+      "name": "Amlodipine",
+      "dose": "5 mg",
+      "frequency": "once daily",
+      "indication": "Hypertension"
+    }
+  ]
+}
