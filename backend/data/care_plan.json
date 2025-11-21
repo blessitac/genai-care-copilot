@@ -1,0 +1,14 @@
+{
+  "P001": [
+    { "task": "Check blood sugar 4 times per day", "status": "pending" },
+    { "task": "Schedule follow-up with Dr. James Smith within 7 days", "status": "pending" },
+    { "task": "Attend diabetes education class", "status": "completed" }
+  ],
+  "P002": [
+    { "task": "Daily weight monitoring", "status": "pending" },
+    { "task": "Reduce sodium intake", "status": "pending" }
+  ],
+  "P003": [
+    { "task": "Use rescue inhaler as needed", "status": "pending" }
+  ]
+}

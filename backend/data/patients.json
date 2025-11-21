@@ -1,0 +1,29 @@
+[
+  {
+    "patient_id": "P001",
+    "name": "Maria Lopez",
+    "age": 56,
+    "sex": "F",
+    "conditions": ["Type 2 Diabetes", "Hypertension"],
+    "risk_score": "high",
+    "primary_provider": "Dr. James Smith"
+  },
+  {
+    "patient_id": "P002",
+    "name": "John Carter",
+    "age": 69,
+    "sex": "M",
+    "conditions": ["Congestive Heart Failure"],
+    "risk_score": "high",
+    "primary_provider": "Dr. Emily Watkins"
+  },
+  {
+    "patient_id": "P003",
+    "name": "Sara Thompson",
+    "age": 62,
+    "sex": "F",
+    "conditions": ["COPD", "Hypertension"],
+    "risk_score": "moderate",
+    "primary_provider": "Dr. Alan Cooper"
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "P001": {
+    "labs": {
+      "hba1c": { "value": 9.1, "unit": "%", "date": "2025-10-01" },
+      "ldl": { "value": 135, "unit": "mg/dL", "date": "2025-10-01" },
+      "egfr": { "value": 70, "unit": "mL/min/1.73m2", "date": "2025-10-01" }
+    },
+    "vitals": [
+      { "date": "2025-10-01", "bp": "150/92", "heart_rate": 86, "weight_kg": 84 },
+      { "date": "2025-09-15", "bp": "142/88", "heart_rate": 82, "weight_kg": 85 }
+    ]
+  },
+  "P002": {
+    "labs": {
+      "bnp": { "value": 560, "unit": "pg/mL", "date": "2025-10-03" }
+    },
+    "vitals": [
+      { "date": "2025-10-03", "bp": "138/82", "heart_rate": 78, "weight_kg": 92 },
+      { "date": "2025-09-20", "bp": "144/85", "heart_rate": 80, "weight_kg": 93 }
+    ]
+  },
+  "P003": {
+    "labs": {},
+    "vitals": [
+      { "date": "2025-10-02", "bp": "160/97", "heart_rate": 90, "weight_kg": 74 },
+      { "date": "2025-09-18", "bp": "155/95", "heart_rate": 88, "weight_kg": 74 }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "P001": {
+    "note": "56-year-old female with long-standing type 2 diabetes, poorly controlled (HbA1c 9.1%), admitted for hyperglycemia and mild dehydration. Started on basal-bolus insulin regimen. Blood pressure elevated during admission. Discharged home on metformin and basal insulin with instructions to monitor glucose four times daily, follow up in 1 week with PCP, and attend diabetes education."
+  },
+  "P002": {
+    "note": "69-year-old male with congestive heart failure with reduced EF. Recent hospitalization for acute volume overload requiring IV diuresis. Discharged home on optimized heart failure medications, instructed on daily weights, sodium restriction, and to follow up with cardiology in 1 week."
+  },
+  "P003": {
+    "note": "62-year-old female with COPD and hypertension presenting with shortness of breath. Treated in outpatient setting with steroids and bronchodilators. Follow-up spirometry planned. Monitoring required for future exacerbations."
+  }
+}
