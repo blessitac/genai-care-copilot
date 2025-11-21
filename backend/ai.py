@@ -3,23 +3,28 @@ import json
 from typing import Dict, Any, List
 from openai import OpenAI
 
-# Read the API key from environment
+# Read environment variables
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL")  # optional
+
 client = None
 if OPENAI_API_KEY:
-    client = OpenAI(api_key=OPENAI_API_KEY)
+    if OPENAI_BASE_URL:
+        client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
+    else:
+        client = OpenAI(api_key=OPENAI_API_KEY)
 
 
-def _call_llm(system_prompt: str, user_prompt: str) -> str:
+def _call_llm(system_prompt: str, user_prompt: str, model: str) -> str:
     """
-    Call the LLM with system and user prompts.
-    Raises RuntimeError if no OpenAI client is available.
+    Call an OpenAI-compatible chat completion endpoint.
+    Raises on error so caller can fall back to stub.
     """
     if client is None:
-        raise RuntimeError("No OpenAI client available")
+        raise RuntimeError("No OpenAI-compatible client available")
     
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model=model,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
@@ -128,6 +133,12 @@ def generate_clinician_summary(patient_bundle: Dict[str, Any]) -> Dict[str, Any]
     Generate a clinician summary using OpenAI or fallback to stub behavior.
     """
     try:
+        # Choose model based on base URL
+        if OPENAI_BASE_URL:
+            model_name = "llama-3.1-8b-instant"   # or another Llama model exposed by the provider
+        else:
+            model_name = "gpt-4o-mini"
+        
         # Build system prompt
         system_prompt = (
             "You are an AI clinical assistant helping a primary care doctor prepare for a visit. "
@@ -149,7 +160,7 @@ def generate_clinician_summary(patient_bundle: Dict[str, Any]) -> Dict[str, Any]
         )
         
         # Call LLM
-        raw = _call_llm(system_prompt, user_prompt)
+        raw = _call_llm(system_prompt, user_prompt, model_name)
         
         # Parse response
         parsed = json.loads(raw)
@@ -171,6 +182,12 @@ def generate_patient_answer(patient_bundle: Dict[str, Any], question: str) -> st
     Generate a patient-friendly answer using OpenAI or fallback to stub behavior.
     """
     try:
+        # Choose model based on base URL
+        if OPENAI_BASE_URL:
+            model_name = "llama-3.1-8b-instant"
+        else:
+            model_name = "gpt-4o-mini"
+        
         # Build system prompt
         system_prompt = (
             "You are a warm, empathetic AI health assistant speaking directly to a patient. "
@@ -188,7 +205,7 @@ def generate_patient_answer(patient_bundle: Dict[str, Any], question: str) -> st
         )
         
         # Call LLM and return answer
-        answer = _call_llm(system_prompt, user_prompt)
+        answer = _call_llm(system_prompt, user_prompt, model_name)
         return answer
         
     except Exception as e:
