@@ -51,7 +51,7 @@ export default function ClinicianView({ selectedPatientId, onSelectPatientId, on
 
   const handleGenerateSummary = async () => {
     if (!selectedPatientId) return
-    
+
     try {
       setLoading(true)
       const data = await generateClinicianSummary(selectedPatientId)
@@ -99,11 +99,10 @@ export default function ClinicianView({ selectedPatientId, onSelectPatientId, on
                 <button
                   key={patient.patient_id}
                   onClick={() => onSelectPatientId(patient.patient_id)}
-                  className={`w-full text-left p-3 rounded-lg border transition-colors ${
-                    selectedPatientId === patient.patient_id
+                  className={`w-full text-left p-3 rounded-lg border transition-colors ${selectedPatientId === patient.patient_id
                       ? 'bg-blue-50 border-blue-200 text-blue-900'
                       : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-                  }`}
+                    }`}
                 >
                   <div className="font-medium">{patient.name}</div>
                   <div className="text-sm text-gray-600">
@@ -123,7 +122,7 @@ export default function ClinicianView({ selectedPatientId, onSelectPatientId, on
                 <p className="mt-2 text-gray-600">Loading patient details...</p>
               </div>
             )}
-            
+
             {patientDetails && (
               <div className="space-y-4">
                 <div>
@@ -152,15 +151,42 @@ export default function ClinicianView({ selectedPatientId, onSelectPatientId, on
 
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">Recent Labs</h4>
-                  <div className="space-y-1 text-sm">
-                    {Object.entries(patientDetails.labs_and_vitals).map(([key, value]) => (
-                      <div key={key} className="flex justify-between">
-                        <span className="text-gray-600">{key}:</span>
-                        <span className="font-medium">{String(value)}</span>
-                      </div>
-                    ))}
+                  <div className="space-y-2 text-sm">
+                    {/* Labs */}
+                    <div>
+                      <p className="text-gray-700 font-medium mb-1">Labs</p>
+                      {patientDetails.labs_and_vitals.labs &&
+                        Object.entries(patientDetails.labs_and_vitals.labs).map(
+                          ([labName, lab]: [string, any]) => (
+                            <div key={labName} className="flex justify-between">
+                              <span className="text-gray-600">{labName}:</span>
+                              <span className="font-medium">
+                                {lab.value} {lab.unit} {lab.date && `(${lab.date})`}
+                              </span>
+                            </div>
+                          )
+                        )}
+                    </div>
+
+                    {/* Vitals */}
+                    <div>
+                      <p className="text-gray-700 font-medium mb-1">Vitals</p>
+                      {patientDetails.labs_and_vitals.vitals &&
+                        patientDetails.labs_and_vitals.vitals.map((vital: any, idx: number) => (
+                          <div key={idx} className="flex justify-between">
+                            <span className="text-gray-600">
+                              {vital.date ? vital.date : `Measurement ${idx + 1}`}:
+                            </span>
+                            <span className="font-medium">
+                              {vital.bp && `BP ${vital.bp}`}
+                              {vital.hr && ` • HR ${vital.hr}`}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
                   </div>
                 </div>
+
 
                 <button
                   onClick={handleGenerateSummary}
@@ -182,7 +208,7 @@ export default function ClinicianView({ selectedPatientId, onSelectPatientId, on
           {/* Right Panel - AI Output */}
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">AI Summary</h2>
-            
+
             {summary && (
               <div className="space-y-4">
                 <div>
