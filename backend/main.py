@@ -16,12 +16,25 @@ from ai import generate_clinician_summary, generate_patient_answer
 
 app = FastAPI()
 
+# Configure CORS origins
+cors_origins = [
+    "http://localhost:5173",  # Vite dev server
+    "http://localhost:3000",  # Alternative React dev server
+    "http://localhost:12000", # Custom port
+    "http://localhost:12001", # Custom port
+]
+
+# Add production origins from environment variable
+cors_origins_env = os.getenv("CORS_ORIGINS", "")
+if cors_origins_env:
+    cors_origins.extend([origin.strip() for origin in cors_origins_env.split(",")])
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=cors_origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -37,6 +50,11 @@ clinical_notes_data = load_json_data("clinical_notes.json")
 medications_data = load_json_data("medications.json")
 labs_and_vitals_data = load_json_data("labs_and_vitals.json")
 care_plan_data = load_json_data("care_plan.json")
+
+@app.get("/api/health")
+def health_check():
+    """Health check endpoint for deployment verification."""
+    return {"status": "ok", "message": "Backend is running"}
 
 @app.get("/api/patients", response_model=List[Patient])
 async def get_patients():

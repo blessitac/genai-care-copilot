@@ -1,154 +1,337 @@
-# genai-care-copilot
-A prototype GenAI Care Copilot that unifies patient, clinician, and health system workflows using mock healthcare data, a FastAPI backend, and a React frontend.
+# GenAI Care Copilot
 
-This is a placeholder edit to enable PR1 creation.
+A prototype GenAI Care Copilot that unifies patient, clinician, and health system workflows using mock healthcare data, a FastAPI backend, and a React frontend. This application demonstrates how AI can enhance healthcare delivery by providing intelligent summaries for clinicians and patient-friendly explanations for patients.
 
-## Mock Data Structure
+## Architecture Overview
 
-All mock data is stored in `backend/data/`
-
-These files include: `patients.json`, `clinical_notes.json`, `medications.json`, `labs_and_vitals.json`, `care_plan.json`
-
-They represent the seed data for the GenAI Care Copilot prototype
-
-## Backend Setup
-
-To run the backend:
-```bash
-cd backend
-uvicorn main:app --reload
+```
+┌─────────────────┐    HTTP/REST API    ┌──────────────────┐
+│   React Frontend │ ◄─────────────────► │  FastAPI Backend │
+│   (TypeScript)   │                     │    (Python)      │
+│                  │                     │                  │
+│ • Clinician View │                     │ • Patient Data   │
+│ • Patient Portal │                     │ • AI Engine      │
+│ • Role Selector  │                     │ • OpenAI API     │
+└─────────────────┘                     └──────────────────┘
+                                                   │
+                                                   ▼
+                                         ┌──────────────────┐
+                                         │   Mock Data      │
+                                         │   (JSON Files)   │
+                                         │                  │
+                                         │ • patients.json  │
+                                         │ • clinical_notes │
+                                         │ • medications    │
+                                         │ • labs_vitals    │
+                                         │ • care_plans     │
+                                         └──────────────────┘
 ```
 
-### Available Endpoints
+## Quick Start
 
-- **GET /api/patients** - Return list of all patients
-- **GET /api/patients/{id}** - Return detailed patient information including clinical notes, medications, labs/vitals, and care plan
-- **POST /api/generate/clinician-summary** - Generate a clinician summary for a patient using AI engine
-- **POST /api/generate/patient-answer** - Generate a patient-friendly answer to a question using AI engine
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- npm or yarn
 
-### API Examples
-
-Get all patients:
-```bash
-curl http://localhost:8000/api/patients
-```
-
-Get specific patient details:
-```bash
-curl http://localhost:8000/api/patients/P001
-```
-
-Generate clinician summary:
-```bash
-curl -X POST http://localhost:8000/api/generate/clinician-summary \
-  -H "Content-Type: application/json" \
-  -d '{"patient_id": "P001"}'
-```
-
-Generate patient answer:
-```bash
-curl -X POST http://localhost:8000/api/generate/patient-answer \
-  -H "Content-Type: application/json" \
-  -d '{"patient_id": "P001", "question": "Why am I on this medication?"}'
-```
-
-## AI Engine Configuration
-
-The backend uses optional OpenAI integration for generating intelligent responses. The AI engine supports two modes of operation:
-
-- **With OpenAI API Key**: When the `OPENAI_API_KEY` environment variable is set, the application will use a real LLM (GPT-4o-mini) to generate clinician summaries and patient answers.
-- **Without OpenAI API Key**: When no API key is provided, the application will fall back to realistic, rule-based stubbed responses that analyze the patient data to provide meaningful outputs.
-
-### Setting up OpenAI Integration
-
-To enable AI-powered responses, set your OpenAI API key as an environment variable:
+### 1. Clone and Setup Environment
 
 ```bash
-export OPENAI_API_KEY="sk-..."
+git clone <repository-url>
+cd genai-care-copilot
+cp .env.example .env
 ```
 
-Restart the backend after setting the key:
+Edit `.env` file and add your OpenAI API key (optional):
+```bash
+OPENAI_API_KEY=sk-your-api-key-here
+```
+
+### 2. Backend Setup
 
 ```bash
 cd backend
-uvicorn main:app --reload
+pip install -r requirements.txt
+chmod +x run.sh
+./run.sh
 ```
 
-### Fallback Behavior
+Or manually:
+```bash
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
 
-If no OpenAI API key is configured, the system will:
-- Generate clinician summaries based on patient data analysis (conditions, lab values, vitals)
-- Provide patient-friendly explanations using keyword matching and templated responses
-- Ensure all endpoints continue to work with realistic, contextual outputs
-
-## Frontend Setup
-
-The React frontend provides a complete user interface for the GenAI Care Copilot with role-based views for both clinicians and patients.
-
-### Installation and Running
+### 3. Frontend Setup
 
 ```bash
 cd frontend
 npm install
+chmod +x run.sh
+./run.sh
+```
+
+Or manually:
+```bash
 npm run dev
 ```
 
-The frontend will be available at `http://localhost:12000` and will automatically connect to the backend API at `http://localhost:8000`.
+### 4. Access the Application
 
-### Frontend Features
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:8000
+- **API Documentation**: http://localhost:8000/docs
 
-#### Role Selector
-- Initial landing page allowing users to choose their role
-- Clean, centered interface with two role options:
-  - **Continue as Clinician** - Access to the clinician dashboard
-  - **Continue as Patient** - Access to the patient portal
+## Docker Setup (Alternative)
 
-#### Clinician View
-- **Three-panel layout** for efficient workflow:
-  - **Left Panel**: Patient selector with list of all patients showing name, age, sex, and risk score
-  - **Middle Panel**: Patient snapshot displaying:
-    - Basic demographics and provider information
-    - Current conditions as labeled tags
-    - Recent lab values and vitals
-    - "Generate Visit Summary" button for AI insights
-  - **Right Panel**: AI-generated content including:
-    - Visit summary paragraph
-    - Risk flags (highlighted in red)
-    - Follow-up recommendations (bulleted list)
+For a containerized setup:
 
-#### Patient View
-- **Patient summary card** with personalized greeting and overview:
-  - Current conditions displayed as tags
-  - Snippet of most recent clinical note
-  - Medications table showing name, dose, and frequency
-- **Interactive chat interface** for Q&A with the care copilot:
-  - Quick-ask buttons for common questions:
-    - "Explain my medications"
-    - "What should I do this week?"
-    - "Why am I taking Lisinopril?"
-  - Free-form question input with chat history
-  - Chat bubbles styled with user messages on right, AI responses on left
+```bash
+docker-compose up --build
+```
 
-### Technology Stack
+This will start both frontend and backend services with proper networking.
 
-- **React 18** with TypeScript for type safety
-- **Vite** for fast development and building
-- **TailwindCSS** for responsive, utility-first styling
-- **Axios** for API communication with the FastAPI backend
+## Backend Configuration
 
-### API Integration
+### Python Version
+- **Required**: Python 3.11 or higher
+- **Recommended**: Python 3.11
 
-The frontend calls the following backend endpoints:
-- `GET /api/patients` - Load patient list for clinician view
-- `GET /api/patients/{id}` - Load detailed patient information
-- `POST /api/generate/clinician-summary` - Generate AI summaries for clinicians
-- `POST /api/generate/patient-answer` - Generate patient-friendly answers to questions
+### Dependencies Installation
+```bash
+cd backend
+pip install -r requirements.txt
+```
 
-### Responsive Design
+### Running Backend
+```bash
+# Using the run script (recommended)
+chmod +x run.sh
+./run.sh
 
-The interface is fully responsive and works on:
-- Desktop computers (optimal experience)
-- Tablets (adapted layout)
-- Mobile phones (stacked layout for smaller screens)
+# Or manually with uvicorn
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
 
-This is a placeholder edit to enable PR5 creation.
+### Environment Variables
+Set `OPENAI_API_KEY` for real AI responses:
+```bash
+export OPENAI_API_KEY="sk-..."
+```
+
+Without an API key, the system uses intelligent fallback responses based on patient data analysis.
+
+## Frontend Configuration
+
+### Running Development Server
+```bash
+cd frontend
+npm install
+npm run dev -- --port=5173
+```
+
+The frontend automatically proxies API requests to the backend at `http://localhost:8000`.
+
+### Expected CORS Behavior
+The backend is configured to accept requests from:
+- `http://localhost:5173` (Vite dev server)
+- `http://localhost:3000` (Alternative React dev server)
+- Production domains (configurable)
+
+## API Endpoints
+
+### Patient Data
+- **GET /api/patients**
+  - Returns list of all patients
+  - Response: Array of patient objects with basic info
+
+- **GET /api/patients/{id}**
+  - Returns detailed patient information
+  - Response: Complete patient data including clinical notes, medications, labs, vitals, and care plans
+
+### AI Generation
+- **POST /api/generate/clinician-summary**
+  - Generates AI-powered clinical summary
+  - Request: `{"patient_id": "P001"}`
+  - Response: Structured summary with visit notes, risk flags, and recommendations
+
+- **POST /api/generate/patient-answer**
+  - Generates patient-friendly answers to questions
+  - Request: `{"patient_id": "P001", "question": "Why am I on this medication?"}`
+  - Response: Plain text answer tailored for patient understanding
+
+### Health Check
+- **GET /api/health**
+  - Returns backend status
+  - Response: `{"status": "ok", "message": "Backend is running"}`
+
+### Example API Calls
+
+```bash
+# Get all patients
+curl http://localhost:8000/api/patients
+
+# Get specific patient
+curl http://localhost:8000/api/patients/P001
+
+# Generate clinician summary
+curl -X POST http://localhost:8000/api/generate/clinician-summary \
+  -H "Content-Type: application/json" \
+  -d '{"patient_id": "P001"}'
+
+# Ask patient question
+curl -X POST http://localhost:8000/api/generate/patient-answer \
+  -H "Content-Type: application/json" \
+  -d '{"patient_id": "P001", "question": "What are my current medications?"}'
+
+# Health check
+curl http://localhost:8000/api/health
+```
+
+## Technology Stack
+
+### Backend
+- **FastAPI** - Modern Python web framework
+- **Pydantic** - Data validation and serialization
+- **OpenAI API** - AI-powered text generation
+- **Uvicorn** - ASGI server for production
+
+### Frontend
+- **React 18** - UI library with hooks
+- **TypeScript** - Type-safe JavaScript
+- **Vite** - Fast build tool and dev server
+- **TailwindCSS** - Utility-first CSS framework
+- **Axios** - HTTP client for API calls
+- **React Router** - Client-side routing
+
+### Development Tools
+- **Docker** - Containerization
+- **ESLint** - JavaScript/TypeScript linting
+- **PostCSS** - CSS processing
+- **Autoprefixer** - CSS vendor prefixes
+
+## Deployment Instructions
+
+### Backend Deployment (Render)
+
+1. Create a new Web Service on Render
+2. Connect your GitHub repository
+3. Configure build settings:
+   - **Build Command**: `cd backend && pip install -r requirements.txt`
+   - **Start Command**: `cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT`
+4. Set environment variables:
+   - `OPENAI_API_KEY` (optional)
+   - `PYTHON_VERSION=3.11`
+5. Deploy
+
+### Frontend Deployment (Vercel)
+
+1. Install Vercel CLI: `npm i -g vercel`
+2. From the frontend directory: `vercel`
+3. Configure build settings:
+   - **Framework**: Vite
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+4. Set environment variables:
+   - `VITE_API_URL=https://your-backend-url.onrender.com`
+5. Deploy
+
+### Environment Variables for Production
+
+Backend (.env):
+```bash
+OPENAI_API_KEY=sk-your-production-key
+BACKEND_PORT=8000
+CORS_ORIGINS=https://your-frontend-domain.vercel.app
+```
+
+Frontend (.env):
+```bash
+VITE_API_URL=https://your-backend-domain.onrender.com
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Backend won't start:**
+- Check Python version: `python --version` (should be 3.11+)
+- Install dependencies: `pip install -r requirements.txt`
+- Check port availability: `lsof -i :8000`
+
+**Frontend can't connect to backend:**
+- Verify backend is running on port 8000
+- Check CORS configuration in `backend/main.py`
+- Ensure API URL is correct in frontend configuration
+
+**AI responses not working:**
+- Verify `OPENAI_API_KEY` is set correctly
+- Check OpenAI API quota and billing
+- System will fall back to rule-based responses without API key
+
+**Docker issues:**
+- Ensure Docker and Docker Compose are installed
+- Check port conflicts: `docker ps`
+- Rebuild containers: `docker-compose up --build --force-recreate`
+
+**Permission errors on scripts:**
+- Make scripts executable: `chmod +x backend/run.sh frontend/run.sh`
+- On Windows, use PowerShell scripts: `backend/run.ps1`
+
+### Development Tips
+
+- Use `npm run dev` for frontend hot reloading
+- Use `uvicorn main:app --reload` for backend auto-restart
+- Check browser console for frontend errors
+- Check terminal output for backend errors
+- Use `/api/health` endpoint to verify backend connectivity
+
+### Performance Optimization
+
+- Frontend builds are optimized for production with Vite
+- Backend uses async/await for non-blocking operations
+- Static assets are served efficiently
+- API responses are structured for minimal data transfer
+
+## Project Structure
+
+```
+genai-care-copilot/
+├── README.md                 # This file
+├── .env.example             # Environment template
+├── docker-compose.yml       # Docker orchestration
+├── .gitignore              # Git ignore rules
+│
+├── backend/                 # FastAPI backend
+│   ├── README.md           # Backend-specific docs
+│   ├── requirements.txt    # Python dependencies
+│   ├── run.sh             # Unix run script
+│   ├── run.ps1            # Windows run script
+│   ├── Dockerfile         # Backend container
+│   ├── main.py            # FastAPI application
+│   ├── models.py          # Pydantic models
+│   ├── ai.py              # AI engine logic
+│   └── data/              # Mock healthcare data
+│       ├── patients.json
+│       ├── clinical_notes.json
+│       ├── medications.json
+│       ├── labs_and_vitals.json
+│       └── care_plan.json
+│
+└── frontend/               # React frontend
+    ├── README.md          # Frontend-specific docs
+    ├── package.json       # Node dependencies
+    ├── run.sh            # Unix run script
+    ├── Dockerfile        # Frontend container
+    ├── vite.config.ts    # Vite configuration
+    ├── tailwind.config.js # Tailwind CSS config
+    ├── src/              # Source code
+    │   ├── App.tsx       # Main application
+    │   ├── main.tsx      # Entry point
+    │   ├── api.ts        # API client
+    │   ├── types.ts      # TypeScript types
+    │   └── components/   # React components
+    └── dist/             # Built assets (generated)
+```
+
+This project is designed to be interview-ready and demonstrates modern full-stack development practices with AI integration.
