@@ -51,3 +51,4 @@ curl -X POST http://localhost:8000/api/generate/patient-answer \
   -H "Content-Type: application/json" \
   -d '{"patient_id": "P001", "question": "Why am I on this medication?"}'
 ```
+This is a placeholder edit to enable PR3 creation.
