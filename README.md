@@ -331,6 +331,7 @@ genai-care-copilot/
     │   ├── api.ts        # API client
     │   ├── types.ts      # TypeScript types
     │   └── components/   # React components
+Placeholder for PR #6
     └── dist/             # Built assets (generated)
 ```
 
