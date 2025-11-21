@@ -94,7 +94,7 @@ async def generate_clinician_summary_endpoint(request: ClinicianSummaryRequest):
         "care_plan": care_plan_data.get(patient_id, [])
     }
     
-    # Generate summary using AI stub
+    # Generate summary using AI engine
     summary = generate_clinician_summary(patient_bundle)
     
     return ClinicianSummaryResponse(**summary)
@@ -124,7 +124,7 @@ async def generate_patient_answer_endpoint(request: PatientQuestionRequest):
         "care_plan": care_plan_data.get(patient_id, [])
     }
     
-    # Generate answer using AI stub
+    # Generate answer using AI engine
     answer = generate_patient_answer(patient_bundle, question)
     
     return PatientAnswerResponse(answer=answer)
